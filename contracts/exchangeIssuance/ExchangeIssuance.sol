@@ -52,6 +52,7 @@ contract ExchangeIssuance is ReentrancyGuard {
     /* ============ Constants ============= */
 
     address constant private ETH_ADDRESS = 0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE;
+    uint256 constant private MAX_UINT96 = 2**96-1;
     
     /* ============ State Variables ============ */
 
@@ -496,8 +497,8 @@ contract ExchangeIssuance is ReentrancyGuard {
      * @param _spender  Spender address to approve
      */
     function _safeApprove(IERC20 _token, address _spender) internal {
-        if (_token.allowance(address(this), _spender) == 0) {
-            _token.safeIncreaseAllowance(_spender, PreciseUnitMath.maxUint256());
+        if (_token.allowance(address(this), _spender) < MAX_UINT96 / 2) {
+            _token.safeIncreaseAllowance(_spender, MAX_UINT96);
         }
     }
     
